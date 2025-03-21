@@ -5,14 +5,25 @@ name: My workflow
 on:
   push:
     branches:
-      - '**'
+      - "**"
 
 jobs:
   build:
     steps:
-      - name: Say hello
-        uses: docker://golang:1.20.3-alpine3.17
+      - name: listfiles
+        uses: docker://golang:1.20
         kind: build
-        shell: sh
         run: |
-          echo "hello world"
+          ls -lrta
+
+      - name: listfiles
+        uses: docker://golang:1.20
+        kind: deploy
+        run: |
+          ls -lrta
+
+      - name: Sonarqube
+        uses: cloudbees-io/sonarqube-bundled-sast-scan-code@v2
+        kind: scan
+        with:
+          language: LANGUAGE_GO
